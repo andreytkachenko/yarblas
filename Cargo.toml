@@ -1,0 +1,22 @@
+[package]
+name = "yarblas"
+version = "0.1.0"
+authors = ["Andrey Tkachenko <andreytkachenko64@gmail.com>"]
+edition = "2018"
+description = "Yet another BLAS implementation in rust"
+repository = "https://github.com/andreytkachenko/yarblas"
+readme = "README.md"
+keywords = ["science", "math", "simd", "blas"]
+categories = ["science"]
+license = "MIT"
+
+[dependencies]
+rand = "0.7.2"
+blas = "0.20.0"
+openblas = "0.0.1"
+crunchy = "0.2.2"
+rayon = "1.2.1"
+threadpool = "1.7.1"
+
+[profile.release]
+debug = true
