@@ -6,8 +6,8 @@ fn main() {
 
     let mut rng = rand::thread_rng();
 
-    const LEN: usize = 16384;
-    let (m, n, k) = (128, 512 * 512, 256);
+    const LEN: usize = 4096;
+    let (m, n, k) = (LEN, LEN, LEN);
 
     // let (mut a, mut b, mut c, mut cref) = unsafe {
     //     let a = yarblas::aligned_alloc::Alloc::new(m * k * 4).into_vec::<f32>();
@@ -38,21 +38,21 @@ fn main() {
 
     let time = std::time::Instant::now();
     unsafe {
-        // blas::sgemm(
-        //     b'N',
-        //     b'N',
-        //     m as i32,
-        //     n as i32,
-        //     k as i32,
-        //     1.0,
-        //     a.as_slice(),
-        //     m as i32,
-        //     b.as_slice(),
-        //     k as i32,
-        //     1.0,
-        //     cref1.as_mut_slice(),
-        //     m as i32,
-        // );
+        blas::sgemm(
+            b'N',
+            b'N',
+            m as i32,
+            n as i32,
+            k as i32,
+            1.0,
+            a.as_slice(),
+            m as i32,
+            b.as_slice(),
+            k as i32,
+            1.0,
+            cref1.as_mut_slice(),
+            m as i32,
+        );
 
         // gemm_nn(
         //     m,
@@ -94,9 +94,10 @@ fn main() {
     // println!("Naive {}", time.elapsed().as_millis());
 
     let time = std::time::Instant::now();
+
     unsafe {
         yarblas::sgemm(
-            &yarblas::executor::RayonExecutor,
+            &yarblas::executor::DefaultExecutor,
             false,
             false,
             false,

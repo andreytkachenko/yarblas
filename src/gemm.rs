@@ -113,8 +113,10 @@ where E: Executor,
 
     for j in (0..n).step_by(NC) {
         let j_b = std::cmp::min(n - j, NC);
+
         for p in (0..k).step_by(KC) {
             let p_b = std::cmp::min(k - p, KC);
+
             for i in (0..m).step_by(MC) {
                 let i_b = std::cmp::min(m - i, MC);
 
@@ -196,8 +198,6 @@ unsafe fn inner_kernel<E, F, K, MR, NR, A, B, C>(
 
     e.execute(0, m_main, MR::DIM, move |i| 
         K::pack_row_a(a.sub_col(i), pa.sub_row(i)));
-
-    e.synchronize();
     
     e.execute(0, n_main, NR::DIM, move |j| {
         // Section TL
@@ -246,6 +246,4 @@ unsafe fn inner_kernel<E, F, K, MR, NR, A, B, C>(
                 c.sub(j, i))
         }
     };
-
-    e.synchronize();
 }

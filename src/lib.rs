@@ -5,6 +5,7 @@ pub mod aligned_alloc;
 pub mod kernel;
 pub mod dim;
 pub mod executor;
+pub mod context;
 
 #[cfg(test)]
 extern crate blas;

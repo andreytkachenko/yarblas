@@ -6,8 +6,6 @@ pub trait Executor {
         step: usize,
         f: F,
     );
-
-    fn synchronize(&self) {}
 }
 
 pub struct DefaultExecutor;
@@ -27,6 +25,12 @@ impl Executor for DefaultExecutor {
 }
 
 pub struct RayonExecutor;
+impl RayonExecutor {
+    pub fn new() -> RayonExecutor {
+        RayonExecutor
+    }
+}
+
 impl Executor for RayonExecutor {
     #[inline]
     fn execute<F: FnOnce(usize) + Send + 'static + Copy + Sync>(
@@ -98,10 +102,7 @@ impl Executor for ThreadPoolExecutor {
 
             prev_end = now_end
         }
-    }
 
-    #[inline]
-    fn synchronize(&self) {
         self.thread_pool.join();
     }
 }

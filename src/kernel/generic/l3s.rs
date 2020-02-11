@@ -15,6 +15,7 @@ pub(crate) unsafe fn sgemm_sup_1x5<A: Matrix<f32>, C: MatrixMut<f32>>(
     let mut c2 = 0.0f32;
     let mut c3 = 0.0f32;
     let mut c4 = 0.0f32;
+    // let mut c5 = 0.0f32;
 
     let mut a = a;
     let mut pb = pb;
@@ -27,6 +28,7 @@ pub(crate) unsafe fn sgemm_sup_1x5<A: Matrix<f32>, C: MatrixMut<f32>>(
         c2 += *pb.col(2) * a0;
         c3 += *pb.col(3) * a0;
         c4 += *pb.col(4) * a0;
+        // c5 += *pb.col(5) * a0;
 
         a.inc_row();
         pb.shift_col(NR);
@@ -43,6 +45,7 @@ pub(crate) unsafe fn sgemm_sup_1x5<A: Matrix<f32>, C: MatrixMut<f32>>(
     let ccol2 = c.row_mut(2);
     let ccol3 = c.row_mut(3);
     let ccol4 = c.row_mut(4);
+    // let ccol5 = c.row_mut(5);
 
     // if beta != 0.0 {
     //     c0 += beta * *ccol0;
@@ -57,6 +60,7 @@ pub(crate) unsafe fn sgemm_sup_1x5<A: Matrix<f32>, C: MatrixMut<f32>>(
     *ccol2 += c2;
     *ccol3 += c3;
     *ccol4 += c4;
+    // *ccol5 += c5;
 }
 
 pub(crate) unsafe fn sgemm_pb_x8(k: usize, b: *const f32, ldb: usize, pb: *mut f32) {
@@ -65,6 +69,7 @@ pub(crate) unsafe fn sgemm_pb_x8(k: usize, b: *const f32, ldb: usize, pb: *mut f
     let mut bcol2 = b.add(ldb * 2);
     let mut bcol3 = b.add(ldb * 3);
     let mut bcol4 = b.add(ldb * 4);
+    // let mut bcol5 = b.add(ldb * 5);
 
     let mut pb = pb;
 
@@ -74,12 +79,14 @@ pub(crate) unsafe fn sgemm_pb_x8(k: usize, b: *const f32, ldb: usize, pb: *mut f
         *pb.add(2) = *bcol2;
         *pb.add(3) = *bcol3;
         *pb.add(4) = *bcol4;
+        // *pb.add(5) = *bcol5;
 
         bcol0 = bcol0.add(1);
         bcol1 = bcol1.add(1);
         bcol2 = bcol2.add(1);
         bcol3 = bcol3.add(1);
         bcol4 = bcol4.add(1);
+        // bcol5 = bcol5.add(1);
 
         pb = pb.add(NR);
     }

@@ -1,7 +1,7 @@
-#[cfg(all(
-    any(target_arch = "x86_64", target_arch = "x86"),
-    target_feature = "avx"
-))]
+// #[cfg(all(
+//     any(target_arch = "x86_64", target_arch = "x86"),
+//     target_feature = "avx"
+// ))]
 pub mod avx;
 pub mod generic;
 pub mod sse;
@@ -11,9 +11,9 @@ use crate::dim::Dim;
 
 pub mod params {
     pub mod single {
-        pub const MC: usize = 12 * 16;
-        pub const NC: usize = 1148 * 5;
-        pub const KC: usize = 16 * 16;
+        pub const MC: usize = 14 * 16;
+        pub const NC: usize = 1350 * 5;
+        pub const KC: usize = 14 * 16;
         pub const MR: usize = 16;
         pub const NR: usize = 5;
     }

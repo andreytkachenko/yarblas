@@ -1,6 +1,6 @@
-const M_LEN: usize = 60;
-const N_LEN: usize = 10;
-const K_LEN: usize = 100;
+const M_LEN: usize = 1023;
+const N_LEN: usize = 4095;
+const K_LEN: usize = 1023;
 
 fn make_matrices() -> (Vec<f32>, Vec<f32>, Vec<f32>, Vec<f32>) {
     use rand::Rng;

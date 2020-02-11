@@ -24,8 +24,7 @@ pub unsafe fn sgemm<E: Executor>(
     ldc: usize,
 ) {
     crate::gemm::gemm::<E, f32, AvxKernel<f32, SseKernel<f32, GenericKernel>>, A16, A5>(
-        e,
-        transa, transb, transc,
+        e, transa, transb, transc,
         m, n, k, alpha, 
         a, lda, b, ldb,
         beta, c, ldc);
