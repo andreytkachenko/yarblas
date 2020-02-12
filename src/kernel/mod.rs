@@ -11,9 +11,14 @@ use crate::dim::Dim;
 
 pub mod params {
     pub mod single {
-        pub const MC: usize = 14 * 16;
-        pub const NC: usize = 1350 * 5;
-        pub const KC: usize = 14 * 16;
+        pub const L2: usize = 256 * 1024;
+        pub const L3: usize = 6 * 1000 * 1000;
+        pub const NUM_CORES: usize = 4;
+
+        pub const KC: usize = 13 * 16 * 2; // sqrt(NUM_CORES * L2 * 2 / 3 / size_of::<f32>())
+        pub const MC: usize = KC;
+
+        pub const NC: usize = (L3 / 20 / KC) * 5;
         pub const MR: usize = 16;
         pub const NR: usize = 5;
     }

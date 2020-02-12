@@ -6,7 +6,7 @@ fn main() {
 
     let mut rng = rand::thread_rng();
 
-    const LEN: usize = 4096;
+    const LEN: usize = 8192;
     let (m, n, k) = (LEN, LEN, LEN);
 
     // let (mut a, mut b, mut c, mut cref) = unsafe {
@@ -95,9 +95,12 @@ fn main() {
 
     let time = std::time::Instant::now();
 
+    use yarblas::kernel::params::single::{MC, KC};
+    
+
     unsafe {
         yarblas::sgemm(
-            &yarblas::executor::DefaultExecutor,
+            &yarblas::executor::RayonExecutor::new(),
             false,
             false,
             false,
