@@ -69,7 +69,6 @@ pub(crate) unsafe fn sgemm_pb_x8(k: usize, b: *const f32, ldb: usize, pb: *mut f
     let mut bcol2 = b.add(ldb * 2);
     let mut bcol3 = b.add(ldb * 3);
     let mut bcol4 = b.add(ldb * 4);
-    // let mut bcol5 = b.add(ldb * 5);
 
     let mut pb = pb;
 
@@ -79,14 +78,12 @@ pub(crate) unsafe fn sgemm_pb_x8(k: usize, b: *const f32, ldb: usize, pb: *mut f
         *pb.add(2) = *bcol2;
         *pb.add(3) = *bcol3;
         *pb.add(4) = *bcol4;
-        // *pb.add(5) = *bcol5;
 
         bcol0 = bcol0.add(1);
         bcol1 = bcol1.add(1);
         bcol2 = bcol2.add(1);
         bcol3 = bcol3.add(1);
         bcol4 = bcol4.add(1);
-        // bcol5 = bcol5.add(1);
 
         pb = pb.add(NR);
     }

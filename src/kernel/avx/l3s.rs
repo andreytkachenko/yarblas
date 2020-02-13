@@ -87,7 +87,7 @@ pub(crate) unsafe fn sgemm_ukr_16x5<C: MatrixMut<f32>>(
         counter += BATCH;
     }
 
-    for _ in k_main..k {
+    while counter < k {
         let a0 = _mm256_load_ps(pa);
         
         let b0 = _mm256_broadcast_ss(&*pb);
@@ -119,6 +119,8 @@ pub(crate) unsafe fn sgemm_ukr_16x5<C: MatrixMut<f32>>(
 
         pa = pa.add(MR);
         pb = pb.add(NR);
+
+        counter += 1;
     }
 
     // let alpha = _mm256_broadcast_ss(&alpha);
@@ -208,7 +210,8 @@ pub(crate) unsafe fn sgemm_sup_16x1<B: Matrix<f32>, C: MatrixMut<f32>>(
     let k_right = k % BATCH;
     let k_main = k - k_right;
 
-    for _ in (0..k_main).step_by(BATCH) {
+    let mut counter = 0;
+    while counter < k_main {
         unroll! {
             for i in 0..8 {
                 let a0 = _mm256_load_ps(pa.ptr());
@@ -223,9 +226,11 @@ pub(crate) unsafe fn sgemm_sup_16x1<B: Matrix<f32>, C: MatrixMut<f32>>(
                 b.inc_col();
             }
         }
+
+        counter += BATCH;
     }
 
-    for _ in k_main..k {
+    while counter < k {
         let a0 = _mm256_load_ps(pa.ptr());
         let a1 = _mm256_load_ps(pa.col(8));
 
@@ -236,6 +241,8 @@ pub(crate) unsafe fn sgemm_sup_16x1<B: Matrix<f32>, C: MatrixMut<f32>>(
 
         pa.shift_col(16);
         b.inc_col();
+
+        counter += 1;
     }
 
     // let alpha = _mm256_broadcast_ss(&alpha);
@@ -264,11 +271,33 @@ pub(crate) unsafe fn sgemm_pa_16x(k: usize, a: *const f32, lda: usize, pa: *mut 
     let mut a = a;
     let mut pa = pa;
 
-    for _ in 0..k {
+    const BATCH: usize = 8;
+
+    let k_right = k % BATCH;
+    let k_main = k - k_right;
+
+    let mut counter = 0;
+    while counter < k_main {
+        unroll! {
+            for i in 0..8 {
+                _mm256_store_ps(pa.add(i * 16), _mm256_loadu_ps(a.add(i * lda)));
+                _mm256_store_ps(pa.add(i * 16 + 8), _mm256_loadu_ps(a.add(i * lda + 8)));
+            }
+        }
+        
+        pa = pa.add(BATCH * 16);
+        a = a.add(BATCH * lda);
+
+        counter += BATCH;
+    }
+
+    while counter < k {
         _mm256_store_ps(pa, _mm256_loadu_ps(a));
         _mm256_store_ps(pa.add(8), _mm256_loadu_ps(a.add(8)));
 
         pa = pa.add(16);
         a = a.add(lda);
+        
+        counter += 1;
     }
 }

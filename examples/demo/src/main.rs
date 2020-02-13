@@ -21,8 +21,9 @@ fn main() {
     let mut a = vec![0.5; m * k];
     let mut b = vec![0.5; n * k];
     let mut c = vec![0.0; m * n];
-    let mut cref1 = vec![0.0; m * n];
     let mut cref = vec![0.0; m * n];
+
+    let mut cref1 = vec![0.0; m * n];
 
     for i in 0..m {
         for j in 0..k {
@@ -68,7 +69,7 @@ fn main() {
         //     m,
         // )
     }
-    println!("Matrixmultiply (mine) {}", time.elapsed().as_millis());
+    println!("Matrixmultiply (blas) {}", time.elapsed().as_millis());
     // println!("Naive (mine) {}", time.elapsed().as_millis());
 
     // let time = std::time::Instant::now();
@@ -100,7 +101,8 @@ fn main() {
 
     unsafe {
         yarblas::sgemm(
-            &yarblas::executor::RayonExecutor::new(),
+            &yarblas::executor::DefaultExecutor,
+
             false,
             false,
             false,
